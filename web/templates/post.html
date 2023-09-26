@@ -1,0 +1,13 @@
+<div class="container mx-auto m-4 hover:bg-zinc-100">
+    <div class="flex flex-row justify-start gap-3">
+        <div name="subreddit"><a href="r/{{ .Subreddit }}">r/{{ .Subreddit }}</a></div>
+        <div name="timestamp">{{ .TimeStamp }}</div>
+    </div>
+    <div name="title">{{ .Title }}</div>
+    <div name="summary">{{ .Summary }}</div>
+    <div name="controls" class="flex flex-row justify-start gap-2">
+        <button name="upvotes" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">{{ .Upvotes }}</button>
+        <button name="comments" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">{{ .CommentAmmount }}</button>
+        <button name="share" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">Share</button>
+    </div>
+</div>

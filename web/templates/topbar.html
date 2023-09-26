@@ -1,0 +1,12 @@
+<div id="topbar" class="flex flex-row">
+  <label id="not-reddit-logo" class="basis-1/4">Not-So-Reddit</label>
+  <button id="searchbar" class="basis-1/2">Seach</button>
+  <div class="flex flex-row-reverse basis-1/4 gap-5 mr-4">
+    <a href="/submit"><button id="new-post">New</button></a>
+    {{ if . }}
+      <button id="login">Log Out</button>
+    {{ else }}
+      <button id="login">Log In</button>
+    {{ end }}
+  </div>
+</div>

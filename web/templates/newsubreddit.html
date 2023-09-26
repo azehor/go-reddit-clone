@@ -1,0 +1,79 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Not-So-Reddit</title>
+  <meta name="description" content="A Simple Reddit Clone">
+  <meta name="author" content="Azehor">
+
+  <meta property="og:title" content="Not-So-Reddit">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="A Simple Reddit Clone">
+  <meta property="og:image" content="image.png">
+  <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script> <!-- NOTE: tailwindcss is included this way for ease of development -->
+  <!--
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  -->
+</head>
+
+<body>
+    {{ template "topbar.html" .Username }}
+    <div class="container mx-auto" >
+      <form hx-post="/subreddits/create" class="flex flex-col">
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Name: </label>
+          <input name="subreddit_name" maxlength="32" type="text" class="ring-2 ring-inset">
+        </div>
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Title: </label>
+          <input name="subreddit_title" type="text" class="ring-2 ring-inset">
+        </div>
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Description: </label>
+          <textarea name="subreddit_description" class="ring-2 ring-inset">
+          </textarea>
+        </div>
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Rules: </label>
+          <textarea name="subreddit_rules" class="ring-2 ring-inset">
+          </textarea>
+        </div>
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Type: </label>
+          <div class="flex flex-row gap-x-1">
+            <input name="subreddit_type" id="public" type="radio" value="Public" class="ring-2 ring-inset">
+            <label for="public">Public</label>
+          </div>
+          <div class="flex flex-row gap-x-1">
+            <input name="subreddit_type" id="restricted" type="radio" value="Restricted" class="ring-2 ring-inset">
+            <label for="restricted">Restricted</label>
+          </div>
+          <div class="flex flex-row gap-x-1">
+            <input name="subreddit_type" id="private" type="radio" value="Private" class="ring-2 ring-inset">
+            <label for="private">Private</label>
+          </div>
+        </div>
+        <div class="flex flex-col bg-sky-300 m-1 p-4">
+          <label>Over 18?: </label>
+          <div class="flex flex-row gap-x-1">
+            <input name="subreddit_over18" id="nsfw" type="checkbox" value="over18" class="ring-2 ring-inset">
+            <label for="nsfw">Restrict this subreddit to users above the age of 18</label>
+          </div>
+        </div>
+        <input type="submit" value="Create Subreddit" class="bg-zinc-200 ring-0 rounded-[8px] py-2xs px-md hover:bg-zinc-300" style="padding-right: 16px padding-left: 16px">
+      </form>
+    </div>
+    <div>
+      {{ template "sidebar.html" . }}
+    </div>
+</body>
+</html>

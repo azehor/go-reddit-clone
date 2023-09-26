@@ -1,0 +1,7 @@
+<div id="sidebar">
+{{ if .Subreddit }}
+  <div>{{ .Subreddit }}</div>
+{{ else if .Username }}
+  <div>{{ .Username }}</div>
+{{end}}
+</div>

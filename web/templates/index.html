@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Not-So-Reddit</title>
+  <meta name="description" content="A Simple Reddit Clone">
+  <meta name="author" content="Azehor">
+
+  <meta property="og:title" content="Not-So-Reddit">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="A Simple Reddit Clone">
+  <meta property="og:image" content="image.png">
+  <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script> <!-- NOTE: tailwindcss is included this way for ease of development -->
+  <!--
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  -->
+</head>
+
+<body>
+    <header class="border">
+      {{ template "topbar.html" .Username}}
+    </header>
+    <div class="flex">
+      <div id="left-sidebar" class="container h-screen w-1/5 sticky top-[56px] overflow-y-scroll overflow-x-hidden box-border border">
+        <a class="flex justify-between bg-zinc-200 ring-0 rounded-[8px] py-2xs px-md hover:bg-zinc-300" href="/" style="padding-right: 16px"><button id="home-button">Home</button></a>
+        <!-- if logged in: recent + joined communities
+          else comminity list (with a limit of 10 + expand button)-->
+        {{ if .LoggedIn }}
+          <div id="communities" hx-get="users/{{ .Username }}/joined" hx-trigger="load"></div>
+        {{ else }}
+          <div id="communities" hx-get="subreddits/popular" hx-trigger="load"></div>
+        {{ end }}
+      </div>
+
+      <div id="post-feed" class="contents justify-items-center">
+        {{ if .CurrentSubreddit }}
+          <div id="post-list" hx-get="r/{{ .CurrentSubreddit }}/{{ .Ordering }}" hx-trigger="load">Loading</div>
+        {{ else }}
+          <div id="post-list" hx-get="r/all" hx-trigger="load">Loading</div>
+        {{ end }}
+      </div>
+      {{ if .CurrentSubreddit }}
+        <div id="community-sidebar" hx-get="r/{{ .CurrentSubreddit }}/sidebar"></div>
+      {{ end }}
+    </div>
+</body>
+</html>
+
+
