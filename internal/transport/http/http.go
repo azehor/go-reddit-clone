@@ -2,8 +2,6 @@ package http
 
 import (
 	"html/template"
-	"log"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
@@ -45,14 +43,20 @@ func (s *Server) AddRoutes(r *chi.Mux) {
 	r.Post("/submit", s.createPost)
 
 	r.Route("/r", func(r chi.Router) {
-		r.Get("/all", s.getPosts)
 		r.Route("/{subreddit}", func(r chi.Router) {
-			r.Get("/", s.getPosts)
-			r.Get("/{ordering}", s.getPosts)
+			r.Get("/", s.getFrontPage)
+			r.Get("/{ordering}", s.getFrontPage)
 			r.Get("/comments/{id}", s.getPost)
 			r.Get("/submit", s.getSubmitPage)
 			r.Get("/sidebar", s.getSidebar)
 		})
+	})
+
+	r.Route("/feeds", func(r chi.Router) {
+		r.Get("/community-feed", s.getSubredditFeed)
+		r.Get("/all-feed", s.getSubredditFeed)
+		r.Get("/home-feed", s.getHomeFeed)
+		r.Get("/popular-feed", s.getSubredditFeed)
 	})
 
 	r.Route("/users", func(r chi.Router) {
@@ -60,56 +64,9 @@ func (s *Server) AddRoutes(r *chi.Mux) {
 		r.Get("/{username}/submit", s.getSubmitPage)
 	})
 
-	r.Get("/subreddits/{ordering}", s.getEmpty) //TODO: gets list of subreddits ordered
-	r.Get("/subreddits/create", s.getNewSubredditPage)
-	r.Post("/subreddits/create", s.createSubreddit)
-
-}
-
-func (s *Server) getFrontPage(w http.ResponseWriter, r *http.Request) {
-	data := struct {
-		CurrentSubreddit, Ordering, Username string
-		LoggedIn                             string
-	}{
-		CurrentSubreddit: "",
-		Ordering:         "hot",
-		Username:         "",
-		LoggedIn:         "",
-	}
-	//TODO: should get a listing with posts from either r/all or logged user's 'joined' subs
-	//TODO: remove reloading template when done with css
-	s.templates = template.Must(template.ParseGlob("./web/templates/*.html"))
-	err := s.templates.ExecuteTemplate(w, "index.html", data)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func (s *Server) getSubmitPage(w http.ResponseWriter, r *http.Request) {
-	data := struct {
-		Subreddit, Username string
-	}{
-		Subreddit: chi.URLParam(r, "subreddit"),
-		Username:  chi.URLParam(r, "username"),
-	}
-
-	s.templates = template.Must(template.ParseGlob("./web/templates/*.html"))
-	err := s.templates.ExecuteTemplate(w, "submit.html", data)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func (s *Server) getNewSubredditPage(w http.ResponseWriter, r *http.Request) {
-	//TODO: should only be accesible if authenticated, else redirect to login page
-
-	s.templates = template.Must(template.ParseGlob("./web/templates/*.html"))
-	err := s.templates.ExecuteTemplate(w, "newsubreddit.html", nil)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func (s *Server) getEmpty(w http.ResponseWriter, r *http.Request) {
-	log.Println("empty request made")
+	r.Route("/subreddits", func(r chi.Router) {
+		r.Get("/{ordering}", s.getEmpty) //TODO: gets list of subreddits ordered
+		r.Get("/create", s.getCreateSubredditPage)
+		r.Post("/create", s.createSubreddit)
+	})
 }

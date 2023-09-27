@@ -34,18 +34,22 @@
         <a class="flex justify-between bg-zinc-200 ring-0 rounded-[8px] py-2xs px-md hover:bg-zinc-300" href="/" style="padding-right: 16px"><button id="home-button">Home</button></a>
         <!-- if logged in: recent + joined communities
           else comminity list (with a limit of 10 + expand button)-->
-        {{ if .LoggedIn }}
-          <div id="communities" hx-get="users/{{ .Username }}/joined" hx-trigger="load"></div>
+        {{ if .Username }}
+          <div id="communities" hx-get="/users/{{ .Username }}/joined" hx-trigger="load"></div>
         {{ else }}
-          <div id="communities" hx-get="subreddits/popular" hx-trigger="load"></div>
+          <div id="communities" hx-get="/subreddits/popular" hx-trigger="load"></div>
         {{ end }}
       </div>
 
       <div id="post-feed" class="contents justify-items-center">
-        {{ if .CurrentSubreddit }}
-          <div id="post-list" hx-get="r/{{ .CurrentSubreddit }}/{{ .Ordering }}" hx-trigger="load">Loading</div>
+        {{ if (eq "home" .CurrentSubreddit) }}
+          <div id="post-list" hx-get="/feeds/home-feed?sort={{ .Ordering }}" hx-trigger="load">Loading</div>
+        {{ else if (eq "all" .CurrentSubreddit) }}
+          <div id="post-list" hx-get="/feeds/all-feed?sort={{ .Ordering }}" hx-trigger="load">Loading</div>
+        {{ else if (eq "popular" .CurrentSubreddit) }}
+          <div id="post-list" hx-get="/feeds/popular-feed?sort={{ .Ordering }}" hx-trigger="load">Loading</div>
         {{ else }}
-          <div id="post-list" hx-get="r/all" hx-trigger="load">Loading</div>
+          <div id="post-list" hx-get="/feeds/community-feed?sort={{ .Ordering }}&name={{ .CurrentSubreddit }}" hx-trigger="load">Loading</div>
         {{ end }}
       </div>
       {{ if .CurrentSubreddit }}

@@ -20,15 +20,26 @@ func (s *Server) getPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) getPosts(w http.ResponseWriter, r *http.Request) {
-	var subreddit = chi.URLParam(r, "subreddit")
-	log.Print(subreddit)
-	data, err := s.posts.GetPosts(subreddit)
+func (s *Server) getHomeFeed(w http.ResponseWriter, r *http.Request) {
+	//TODO: should get a list of subreddit from user's joined and get posts from the database using that list
+	data, err := s.posts.GetPosts("all")
 	if err != nil {
 		log.Print(err)
 	}
 	for _, p := range data {
 		log.Print(p)
+	}
+	err = s.templates.ExecuteTemplate(w, "post_list.html", data)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (s *Server) getSubredditFeed(w http.ResponseWriter, r *http.Request) {
+	var subreddit = r.URL.Query().Get("name")
+	data, err := s.posts.GetPosts(subreddit)
+	if err != nil {
+		log.Print(err)
 	}
 	err = s.templates.ExecuteTemplate(w, "post_list.html", data)
 	if err != nil {

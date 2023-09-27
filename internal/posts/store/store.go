@@ -103,6 +103,7 @@ func (s *Store) GetPost(id string) (*model.Post, error) {
 }
 
 func (s *Store) GetPosts(subreddit string) ([]*model.Post, error) {
+	log.Print(subreddit)
 	var posts []*model.Post
 	var stmt string
 	if subreddit != "" {
