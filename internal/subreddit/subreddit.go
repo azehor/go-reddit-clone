@@ -7,6 +7,7 @@ import (
 type Store interface {
 	InsertSubreddit(subreddit *model.Subreddit) (*model.Subreddit, error)
 	GetSubreddit(id string) (*model.Subreddit, error)
+	GetSubredditList(ordering string) ([]*model.Subreddit, error)
 	//TODO: finish CRUD
 }
 
@@ -35,4 +36,12 @@ func (s *Subreddits) GetSubreddit(id string) (*model.Subreddit, error) {
 	}
 
 	return subreddit, nil
+}
+
+func (s *Subreddits) GetSubredditList(ordering string) ([]*model.Subreddit, error) {
+	subreddit_list, err := s.store.GetSubredditList(ordering)
+	if err != nil {
+		return nil, err
+	}
+	return subreddit_list, nil
 }

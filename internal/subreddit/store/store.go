@@ -28,22 +28,9 @@ func New(db DB) *Store {
 	}
 }
 
-type Subreddit struct {
-	ID            string     `db:"id"`
-	Description   string     `db:"description"`
-	Rules         string     `db:"rules"`
-	Over18        bool       `db:"over18"`
-	Subscribers   int        `db:"subscribers"`
-	SubredditType string     `db:"subreddit_type"`
-	Title         string     `db:"title"`
-	URL           string     `db:"url"`
-	CreatedAt     *time.Time `db:"created_at"`
-}
-
 // TODO: Extract initTable into SQL file
 func initTable(db DB) {
 	var postSchema = `
-    DELETE FROM subreddit;
     CREATE TABLE IF NOT EXISTS subreddit (
         id integer NOT NULL PRIMARY KEY,
         description text,
@@ -94,4 +81,13 @@ func (s *Store) GetSubreddit(id string) (*model.Subreddit, error) {
 		return nil, err
 	}
 	return &subreddit, nil
+}
+
+func (s *Store) GetSubredditList(ordering string) ([]*model.Subreddit, error) {
+	var list []*model.Subreddit
+	stmt := "SELECT * FROM subreddit LIMIT 25"
+	if err := s.db.Select(&list, stmt); err != nil {
+		return nil, err
+	}
+	return list, nil
 }

@@ -20,6 +20,22 @@ func (s *Server) getSidebar(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (s *Server) getSubredditList(w http.ResponseWriter, r *http.Request) {
+	var ordering string
+	if ordering := chi.URLParam(r, "ordering"); ordering == "" {
+		ordering = "hot" //TODO: if signed in, default value should be pulled from user settings
+	}
+	data, err := s.subreddits.GetSubredditList(ordering)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = s.templates.ExecuteTemplate(w, "subreddit_list.html", data)
+	if err != nil {
+		log.Println(err)
+	}
+
+}
+
 func (s *Server) createSubreddit(w http.ResponseWriter, r *http.Request) {
 	var name = r.FormValue("subreddit_name")
 	var title = r.FormValue("subreddit_title")

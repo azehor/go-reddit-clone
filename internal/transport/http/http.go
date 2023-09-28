@@ -18,6 +18,7 @@ type Posts interface {
 type Subreddits interface {
 	InsertSubreddit(subreddit *s.Subreddit) (*s.Subreddit, error)
 	GetSubreddit(id string) (*s.Subreddit, error)
+	GetSubredditList(ordering string) ([]*s.Subreddit, error)
 }
 
 type Server struct {
@@ -65,7 +66,8 @@ func (s *Server) AddRoutes(r *chi.Mux) {
 	})
 
 	r.Route("/subreddits", func(r chi.Router) {
-		r.Get("/{ordering}", s.getEmpty) //TODO: gets list of subreddits ordered
+		r.Get("/", s.getSubredditList)
+		r.Get("/{ordering}", s.getSubredditList)
 		r.Get("/create", s.getCreateSubredditPage)
 		r.Post("/create", s.createSubreddit)
 	})

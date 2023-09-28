@@ -108,7 +108,6 @@ func (s *Store) GetPosts(subreddit string) ([]*model.Post, error) {
 	var stmt string
 	if subreddit != "" {
 		stmt = "SELECT * FROM posts WHERE subreddit = '" + subreddit + "' LIMIT 25"
-		log.Print(stmt)
 	} else {
 		stmt = "SELECT * FROM posts LIMIT 25"
 	}
