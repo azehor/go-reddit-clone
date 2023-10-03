@@ -50,7 +50,8 @@ func initTable(db DB) {
         comment_ammount integer DEFAULT 0,
         subreddit text,
         created_at datetime,
-        timestamp datetime
+        timestamp datetime,
+        user text
     );`
 
 	res := db.MustExec(postSchema)
@@ -73,8 +74,8 @@ func (s *Store) InsertPost(post *model.Post) (*model.Post, error) {
 	post.TimeStamp = timestamp(timeNow())
 
 	res, err := s.db.NamedQuery(`INSERT INTO
-        posts(title, body, summary, subreddit, created_at, timestamp)
-        VALUES (:title, :body, :summary, :subreddit, :created_at, :timestamp)
+        posts(title, body, summary, subreddit, created_at, timestamp, user)
+        VALUES (:title, :body, :summary, :subreddit, :created_at, :timestamp, :user)
         RETURNING *`, post)
 	if err != nil {
 		log.Print(err)

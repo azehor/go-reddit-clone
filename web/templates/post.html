@@ -1,6 +1,6 @@
-<div class="container mx-auto m-4 hover:bg-zinc-100">
+<div class="container mx-auto m-4 hover:bg-zinc-100" hx-get="/r/{{ .Subreddit }}/comments/{{ .ID }}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">
     <div class="flex flex-row justify-start gap-3">
-        <div name="subreddit"><a href="r/{{ .Subreddit }}">r/{{ .Subreddit }}</a></div>
+        <div name="subreddit"><a href="/r/{{ .Subreddit }}">r/{{ .Subreddit }}</a></div>
         <div name="timestamp">{{ .TimeStamp }}</div>
     </div>
     <div name="title">{{ .Title }}</div>

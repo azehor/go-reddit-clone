@@ -47,7 +47,7 @@ func (s *Server) AddRoutes(r *chi.Mux) {
 		r.Route("/{subreddit}", func(r chi.Router) {
 			r.Get("/", s.getFrontPage)
 			r.Get("/{ordering}", s.getFrontPage)
-			r.Get("/comments/{id}", s.getPost)
+			r.Get("/comments/{id}", s.getPostPage)
 			r.Get("/submit", s.getSubmitPage)
 			r.Get("/sidebar", s.getSidebar)
 		})

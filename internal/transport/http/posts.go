@@ -52,13 +52,14 @@ func (s *Server) createPost(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Posted Title: %v", title)
 	var body = r.FormValue("newPostBody")
 	var subreddit = r.FormValue("newPostSubreddit")
-
+	var username = r.FormValue("newPostUsername")
 	//TODO: Validate inputs
 
 	p := model.Post{
 		Title:     &title,
 		Body:      &body,
 		Subreddit: &subreddit,
+		CreatedBy: &username,
 	}
 
 	data, err := s.posts.InsertPost(&p)

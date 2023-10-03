@@ -5,11 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {{ if .IsFeed }}
-  <title>Not-So-Reddit</title>
-  {{ else }}
-  <title>{{.CurrentSubreddit}}</title>
-  {{ end }}
+  <title>{{ .Post.Title }}: r/{{ .Post.Subreddit }}</title>
   <meta name="description" content="A Simple Reddit Clone">
   <meta name="author" content="Azehor">
 
@@ -36,8 +32,6 @@
     <div class="flex">
       <div id="left-sidebar" class="container h-screen w-1/5 sticky top-[56px] overflow-y-scroll overflow-x-hidden box-border border">
         <a class="flex justify-between bg-zinc-200 ring-0 rounded-[8px] py-2xs px-md hover:bg-zinc-300" href="/" style="padding-right: 16px"><button id="home-button">Home</button></a>
-        <!-- if logged in: recent + joined communities
-          else comminity list (with a limit of 10 + expand button)-->
         {{ if .Username }}
           <div id="communities" hx-get="/users/{{ .Username }}/joined" hx-trigger="load"></div>
         {{ else }}
@@ -45,16 +39,32 @@
         {{ end }}
       </div>
 
-      <div id="post-feed" class="contents justify-items-center">
-        {{ if .IsFeed }}
-          <div id="post-list" hx-get="/feeds/{{ .CurrentSubreddit }}-feed?sort={{ .Ordering }}" hx-trigger="load">Loading</div>
-        {{ else }}
-          <div id="post-list" hx-get="/feeds/community-feed?sort={{ .Ordering }}&name={{ .CurrentSubreddit }}" hx-trigger="load">Loading</div>
+      <div id="post" class="contents justify-items-center">
+        {{ with .Post }}
+        <div class="container mx-auto m-4 hover:bg-zinc-100">
+            <div class="flex flex-col">
+              <div class="flex flex-row justify-start gap-3">
+                  <div name="subreddit"><a href="/r/{{ .Subreddit }}">r/{{ .Subreddit }}</a></div>
+                  <div name="timestamp">{{ .TimeStamp }}</div>
+              </div>
+              <div name="posted_by"><a href="/users/{{ .CreatedBy }}">by {{ .CreatedBy }}</a></div>
+            </div>
+            <div name="title"><h1>{{ .Title }}</h1></div>
+            <div name="summary">{{ .Body }}</div>
+            <div name="controls" class="flex flex-row justify-start gap-2">
+                <button name="upvotes" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">{{ .Upvotes }}</button>
+                <button name="comments" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">{{ .CommentAmmount }}</button>
+                <button name="share" class="bg-zinc-200 ring-0 rounded-full py-1 px-2 hover:bg-zinc-300">Share</button>
+            </div>
+        </div>
         {{ end }}
+        <div id="comment-section">
+          <div>Loading ...</div>
+          <button>Load More Posts</button>
+        </div>
       </div>
-      {{ if .CurrentSubreddit }}
-        <div id="community-sidebar" hx-get="r/{{ .CurrentSubreddit }}/sidebar"></div>
-      {{ end }}
+      <div id="community-sidebar" hx-get="r/{{ .CurrentSubreddit }}/sidebar"></div>
+      <!-- TODO: change sidebar for 'top posts' -->
     </div>
 </body>
 </html>

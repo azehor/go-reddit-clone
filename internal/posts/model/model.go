@@ -15,9 +15,10 @@ type Post struct {
 	Subreddit      *string    `db:"subreddit"`
 	TimeStamp      *string    `db:"timestamp"`
 	CreatedAt      *time.Time `db:"created_at"`
+	CreatedBy      *string    `db:"user"`
 }
 
 func (p *Post) String() string {
-	return fmt.Sprintf("ID: %v\nTitle: %v\nBody: %v\nSummary: %v\nUpvotes: %v\nComment Ammount: %v\nSubreddit: %v\nTimestamp: %v\nCreated At: %v\n",
-		*p.ID, *p.Title, *p.Body, *p.Summary, *p.Upvotes, *p.CommentAmmount, *p.Subreddit, *p.TimeStamp, *p.CreatedAt)
+	return fmt.Sprintf("ID: %v\nTitle: %v\nBody: %v\nSummary: %v\nUpvotes: %v\nComment Ammount: %v\nSubreddit: %v\nTimestamp: %v\nCreated At: %v\nCreated By: %v\n",
+		*p.ID, *p.Title, *p.Body, *p.Summary, *p.Upvotes, *p.CommentAmmount, *p.Subreddit, *p.TimeStamp, *p.CreatedAt, *p.CreatedBy)
 }
